@@ -41,15 +41,7 @@ namespace CpuSchedulingWinForms
                 "Do you want to check for deadlocks?\nYes - Banker's Algorithm\nNo - Resource Allocation Graph",
                 "Deadlock Detection", MessageBoxButtons.YesNoCancel);
 
-            if (deadlockChoice == DialogResult.Yes)
-            {
-                DeadlockDetection.BankersAlgorithm();
-            }
-            else if (deadlockChoice == DialogResult.No)
-            {
-                DeadlockDetection.ResourceAllocationGraph();
-            }
-
+            
         }
         
     }
