@@ -10,63 +10,52 @@ namespace CpuSchedulingWinForms
     public static class Algorithms
     {
         public static void fcfsAlgorithm(string userInput)
+{
+    int np = Convert.ToInt16(userInput);
+    double[] bp = new double[np];
+    double[] wtp = new double[np];
+    double[] tat = new double[np];
+    double totalWt = 0, totalTat = 0, totalIdleTime = 0;
+    double lastCompletionTime = 0;
+
+    for (int i = 0; i < np; i++)
+    {
+        bp[i] = Convert.ToDouble(
+            Microsoft.VisualBasic.Interaction.InputBox($"Enter Burst Time for P{i + 1}:", "Burst Time", "", -1, -1));
+    }
+
+    for (int i = 0; i < np; i++)
+    {
+        if (i == 0)
         {
-            int np = Convert.ToInt16(userInput);
-            int npX2 = np * 2;
-
-            double[] bp = new double[np];
-            double[] wtp = new double[np];
-            string[] output1 = new string[npX2];
-            double twt = 0.0, awt; 
-            int num;
-
-            DialogResult result = MessageBox.Show("First Come First Serve Scheduling ", "", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-            if (result == DialogResult.Yes)
-            {
-                for (num = 0; num <= np - 1; num++)
-                {
-                    //MessageBox.Show("Enter Burst time for P" + (num + 1) + ":", "Burst time for Process", MessageBoxButtons.OK, MessageBoxIcon.Question);
-                    //Console.WriteLine("\nEnter Burst time for P" + (num + 1) + ":");
-
-                    string input =
-                    Microsoft.VisualBasic.Interaction.InputBox("Enter Burst time: ",
-                                                       "Burst time for P" + (num + 1),
-                                                       "",
-                                                       -1, -1);
-
-                    bp[num] = Convert.ToInt64(input);
-
-                    //var input = Console.ReadLine();
-                    //bp[num] = Convert.ToInt32(input);
-                }
-
-                for (num = 0; num <= np - 1; num++)
-                {
-                    if (num == 0)
-                    {
-                        wtp[num] = 0;
-                    }
-                    else
-                    {
-                        wtp[num] = wtp[num - 1] + bp[num - 1];
-                        MessageBox.Show("Waiting time for P" + (num + 1) + " = " + wtp[num], "Job Queue", MessageBoxButtons.OK, MessageBoxIcon.None);
-                    }
-                }
-                for (num = 0; num <= np - 1; num++)
-                {
-                    twt = twt + wtp[num];
-                }
-                awt = twt / np;
-                MessageBox.Show("Average waiting time for " + np + " processes" + " = " + awt + " sec(s)", "Average Awaiting Time", MessageBoxButtons.OK, MessageBoxIcon.None);
-            }
-            else if (result == DialogResult.No)
-            {
-                //this.Hide();
-                //Form1 frm = new Form1();
-                //frm.ShowDialog();
-            }
+            wtp[i] = 0;
+            totalIdleTime += 0;  // No idle time before the first process
         }
+        else
+        {
+            wtp[i] = wtp[i - 1] + bp[i - 1];
+            if (wtp[i] > lastCompletionTime)
+                totalIdleTime += wtp[i] - lastCompletionTime;
+        }
+        tat[i] = wtp[i] + bp[i];
+        lastCompletionTime = tat[i];
+
+        totalWt += wtp[i];
+        totalTat += tat[i];
+    }
+
+    double avgWaitTime = totalWt / np;
+    double avgTurnaroundTime = totalTat / np;
+    double cpuUtilization = (lastCompletionTime - totalIdleTime) / lastCompletionTime * 100;
+
+    MessageBox.Show($"FCFS Metrics:\n\n" +
+                    $"Average Waiting Time: {avgWaitTime:F2} sec\n" +
+                    $"Average Turnaround Time: {avgTurnaroundTime:F2} sec\n" +
+                    $"Idle Time: {totalIdleTime:F2} sec\n" +
+                    $"CPU Utilization: {cpuUtilization:F2}%",
+                    "FCFS Performance", MessageBoxButtons.OK, MessageBoxIcon.Information);
+}
+
 
         public static void sjfAlgorithm(string userInput)
         {
