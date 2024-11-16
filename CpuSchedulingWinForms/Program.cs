@@ -18,7 +18,7 @@ namespace CpuSchedulingWinForms
         "Enter the number of processes: ", "Number of Processes", "", -1, -1);
 
     DialogResult algorithmChoice = MessageBox.Show(
-        "Select Algorithm:\nYes - FCFS\nNo - SJF",
+        "Select Algorithm:\nYes - FCFS\nNo - RR",
         "Choose Scheduling Algorithm",
         MessageBoxButtons.YesNoCancel);
 
@@ -28,7 +28,7 @@ namespace CpuSchedulingWinForms
     }
     else if (algorithmChoice == DialogResult.No)
     {
-        Algorithms.sjfAlgorithm(inputProcesses);
+        Algorithms.roundRobinAlgorithm(inputProcesses);
     }
     else
     {
@@ -38,7 +38,7 @@ namespace CpuSchedulingWinForms
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new CpuScheduler());
                                 DialogResult deadlockChoice = MessageBox.Show(
-                "Do you want to check for deadlocks?\nYes - Banker's Algorithm\nNo - Resource Allocation Graph",
+                "Do you want to check for deadlocks?\nYes - Banker's Algorithm\nNo",
                 "Deadlock Detection", MessageBoxButtons.YesNoCancel);
 
             

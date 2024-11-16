@@ -97,62 +97,6 @@ public static class DeadlockDetection
         MessageBox.Show($"System is in a safe state.\nSafe Sequence: {string.Join(" -> ", safeSequence)}",
             "Safe State", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
-            public static void ResourceAllocationGraph()
-{
-    int processes = Convert.ToInt32(
-        Microsoft.VisualBasic.Interaction.InputBox("Enter number of processes: ", "Processes", "", -1, -1));
-    int resources = Convert.ToInt32(
-        Microsoft.VisualBasic.Interaction.InputBox("Enter number of resource types: ", "Resources", "", -1, -1));
-
-    int[,] allocation = new int[processes, resources];
-    int[,] request = new int[processes, resources];
-
-    // Input Allocation Matrix
-    for (int i = 0; i < processes; i++)
-    {
-        for (int j = 0; j < resources; j++)
-        {
-            allocation[i, j] = Convert.ToInt32(
-                Microsoft.VisualBasic.Interaction.InputBox(
-                    $"Enter allocation for process {i + 1}, resource {j + 1}: ",
-                    "Allocation Matrix", "", -1, -1));
-        }
-    }
-
-    // Input Request Matrix
-    for (int i = 0; i < processes; i++)
-    {
-        for (int j = 0; j < resources; j++)
-        {
-            request[i, j] = Convert.ToInt32(
-                Microsoft.VisualBasic.Interaction.InputBox(
-                    $"Enter request for process {i + 1}, resource {j + 1}: ",
-                    "Request Matrix", "", -1, -1));
-        }
-    }
-
-    // Detect Deadlock using Wait-For Graph
-    bool[] visited = new bool[processes];
-    bool deadlock = false;
-
-    for (int i = 0; i < processes; i++)
-    {
-        if (!visited[i])
-        {
-            if (DetectCycle(i, visited, new bool[processes], processes, request))
-            {
-                deadlock = true;
-                break;
-            }
-        }
-    }
-
-    if (deadlock)
-        MessageBox.Show("Deadlock detected in the system.", "Deadlock Detected", MessageBoxButtons.OK, MessageBoxIcon.Error);
-    else
-        MessageBox.Show("No deadlock detected.", "Deadlock Free", MessageBoxButtons.OK, MessageBoxIcon.Information);
-}
-
 private static bool DetectCycle(int process, bool[] visited, bool[] recursionStack, int processes, int[,] request)
 {
     visited[process] = true;
@@ -178,8 +122,6 @@ public static void RecoverFromDeadlock()
     MessageBox.Show("Recovery strategy initiated. Terminating one or more processes to resolve deadlock.", 
                     "Deadlock Recovery", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-    // Example: Terminate process with the highest allocation
-    // (Implement logic here based on your chosen recovery strategy)
 }
 
 }
